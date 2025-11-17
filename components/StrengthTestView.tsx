@@ -52,7 +52,7 @@ const StrengthTestView: React.FC<StrengthTestViewProps> = ({ addReps, setView, s
                 <li>Do approximately <strong className="text-white">{dailyAvg}</strong> {unitText} every day.</li>
                 <li>Do 3 workouts of 3 sets, with about <strong className="text-white">{setsReps}</strong> {unitTextShort} per set.</li>
            </ul>
-           <p className="font-bold">Your personalized weekly goals will dynamically change based on your goals and results.</p>
+           <p className="font-bold">Your weekly goal changes dynamically based on your results and goals.</p>
         </div>
         <p className="text-center text-lg text-gray-300 mb-8">
           Now go rest for a few days and we'll start the program.

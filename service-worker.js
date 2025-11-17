@@ -12,7 +12,10 @@ const URLS_TO_CACHE = [
   '/components/StrengthTestView.tsx',
   '/components/DayDetailModal.tsx',
   '/components/Stopwatch.tsx',
-  '/components/Icons.tsx'
+  '/components/Icons.tsx',
+  '/components/GlobalHistoryView.tsx',
+  '/components/VO2MaxView.tsx',
+  '/components/VO2MaxWorkoutView.tsx'
 ];
 
 self.addEventListener('install', event => {

@@ -1,7 +1,7 @@
 {
   "name": "Workout Tracker",
   "short_name": "WorkoutApp",
-  "description": "A versatile application to log your daily workouts for pushups, squats, chin-ups, and kettlebell swings, complete with personalized programs and history tracking.",
+  "description": "A versatile workout tracker for various exercises, featuring personalized programs and detailed history.",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#111827",

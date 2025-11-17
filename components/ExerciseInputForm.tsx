@@ -58,7 +58,7 @@ const ProgramTracker: React.FC<{ log: ExerciseLog; program: ProgramState; setVie
                 style={{ width: `${progressPercent}%`}}
             ></div>
         </div>
-        <p className="text-center text-gray-500 text-sm">Your goal increases by ~10% each week for 4 weeks.</p>
+        <p className="text-center text-gray-500 text-sm">Your weekly goal changes dynamically based on your results and goals.</p>
     </div>
   );
 };

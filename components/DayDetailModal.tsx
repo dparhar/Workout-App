@@ -19,7 +19,7 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ dateKey, entry, onClose
   const [addCount, setAddCount] = useState<string>('');
 
   const config = exerciseConfigs[exercise];
-  const unitText = config.unit === 'reps' ? 'reps' : 'sec';
+  const unitText = exercise === 'VO2 Max Interval' ? 'sets' : config.unit === 'reps' ? 'reps' : 'sec';
 
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {

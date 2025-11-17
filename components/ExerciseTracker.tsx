@@ -1,10 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import type { ExerciseLog, DailyLogEntry, ExerciseSet, View, ProgramState, Exercise } from '../types';
+import { exerciseConfigs } from '../types';
 import { HistoryIcon, ArrowLeftIcon } from './Icons';
 import ExerciseInputForm from './ExerciseInputForm';
 import HistoryView from './HistoryView';
 import StrengthTestView from './StrengthTestView';
+import VO2MaxWorkoutView from './VO2MaxWorkoutView';
 
 interface ExerciseTrackerProps {
     exercise: Exercise;
@@ -157,6 +159,82 @@ const ExerciseTracker: React.FC<ExerciseTrackerProps> = ({ exercise }) => {
   const todayKey = new Date().toISOString().split('T')[0];
   const todaysData = useMemo(() => log[todayKey], [log, todayKey]);
 
+  const renderContent = () => {
+    if (view === 'history') {
+      return (
+        <HistoryView 
+          log={log} 
+          addReps={addReps}
+          editSet={editSet}
+          deleteSet={deleteSet}
+          exercise={exercise}
+        />
+      );
+    }
+
+    if (view === 'test') {
+      return (
+        <StrengthTestView 
+          addReps={addReps} 
+          setView={setView}
+          startProgram={startProgram}
+          exercise={exercise}
+        />
+      );
+    }
+    
+    // Default to 'input' view
+    if (exercise === 'VO2 Max Interval') {
+        return (
+            <div className="space-y-8 animate-fade-in">
+                <VO2MaxWorkoutView addReps={(count) => addReps(count, false)} />
+                <div className="p-8 bg-gray-800 rounded-xl shadow-2xl">
+                    <h2 className="text-2xl font-bold text-center mb-6 text-gray-300">Today's Progress</h2>
+                    <div className="text-center mb-6">
+                        <p className="text-lg text-gray-400">Total Sets</p>
+                        <p className="text-6xl font-bold text-cyan-400">
+                            {todaysData?.total || 0}
+                            <span className="text-3xl text-gray-500 ml-2">sets</span>
+                        </p>
+                    </div>
+                    {todaysData && todaysData.sets.filter(set => !set.isTest).length > 0 ? (
+                        <div>
+                            <h3 className="text-xl font-semibold mb-4 text-center">Your Sets</h3>
+                            <ul className="max-h-60 overflow-y-auto space-y-2 pr-2">
+                                {todaysData.sets.filter(set => !set.isTest).map((set, index) => (
+                                    <li
+                                        key={set.id}
+                                        className="flex justify-between items-center p-3 bg-gray-700 rounded-lg animate-slide-in"
+                                        style={{ animationDelay: `${index * 50}ms` }}
+                                    >
+                                        <span className="font-semibold text-gray-300">Set {index + 1}</span>
+                                        <span className="font-bold text-lg text-cyan-400">{set.count} sets</span>
+                                        <span className="text-sm text-gray-500">{new Date(set.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ) : (
+                        <p className="text-center text-gray-500 mt-6">No sets logged yet today. Let's get started!</p>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    return (
+      <ExerciseInputForm 
+        addReps={(count) => addReps(count, false)} 
+        todaysData={todaysData} 
+        setView={setView}
+        log={log}
+        program={program}
+        exercise={exercise}
+      />
+    );
+  };
+
+
   return (
     <>
         <div className="flex justify-end mb-4">
@@ -166,36 +244,12 @@ const ExerciseTracker: React.FC<ExerciseTrackerProps> = ({ exercise }) => {
                 aria-label={view === 'input' ? 'Show History' : 'Back to workout'}
             >
                 {view === 'input' ? <HistoryIcon /> : <ArrowLeftIcon />}
-                <span className="hidden sm:inline">{view === 'input' ? 'History' : 'Back to workout'}</span>
+                <span>{view === 'input' ? 'History' : 'Back to workout'}</span>
             </button>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          {view === 'input' ? (
-            <ExerciseInputForm 
-              addReps={(count) => addReps(count, false)} 
-              todaysData={todaysData} 
-              setView={setView}
-              log={log}
-              program={program}
-              exercise={exercise}
-            />
-          ) : view === 'history' ? (
-            <HistoryView 
-              log={log} 
-              addReps={addReps}
-              editSet={editSet}
-              deleteSet={deleteSet}
-              exercise={exercise}
-            />
-          ) : (
-            <StrengthTestView 
-              addReps={addReps} 
-              setView={setView}
-              startProgram={startProgram}
-              exercise={exercise}
-            />
-          )}
+          {renderContent()}
         </div>
     </>
   );

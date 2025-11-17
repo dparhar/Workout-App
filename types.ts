@@ -9,7 +9,8 @@ export type Exercise =
   | 'Left Plank'
   | 'Right Plank'
   | 'Wall Sit'
-  | 'Glute Bridge Hold';
+  | 'Glute Bridge Hold'
+  | 'VO2 Max Interval';
 
 export type ExerciseUnit = 'reps' | 'seconds';
 
@@ -23,7 +24,25 @@ export const exerciseConfigs: Record<Exercise, { name: string; verb: string; ver
     'Right Plank': { name: 'Right Plank', verb: 'right plank', verbPast: 'seconds', unit: 'seconds' },
     'Wall Sit': { name: 'Wall Sit', verb: 'wall sit', verbPast: 'seconds', unit: 'seconds' },
     'Glute Bridge Hold': { name: 'Glute Bridge Hold', verb: 'glute bridge hold', verbPast: 'seconds', unit: 'seconds' },
+    'VO2 Max Interval': { name: 'VO2 Max Interval', verb: 'interval', verbPast: 'intervals', unit: 'reps' },
 };
+
+export const REP_EXERCISES: Exercise[] = [
+  'Push-ups',
+  'Squats',
+  'Chin-ups',
+  'Kettlebell Swings',
+];
+
+export const TIME_EXERCISES: Exercise[] = [
+  'Plank',
+  'Left Plank',
+  'Right Plank',
+  'Wall Sit',
+  'Glute Bridge Hold',
+];
+
+export const ALL_EXERCISES: Exercise[] = [...REP_EXERCISES, ...TIME_EXERCISES, 'VO2 Max Interval'];
 
 export interface ExerciseSet {
   id: string;
@@ -48,4 +67,11 @@ export interface ProgramState {
   initialMax: number;
   currentWeek: number; // 1 to 4+
   weeklyGoals: [number, number, number, number];
+}
+
+export interface AggregatedLog {
+  [date: string]: {
+    exercise: Exercise;
+    entry: DailyLogEntry;
+  }[];
 }

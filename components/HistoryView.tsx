@@ -130,7 +130,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ log, addReps, editSet, delete
                 <div className="mt-2 sm:mt-0 text-right">
                   <span className="font-bold text-xl text-cyan-400">{total}</span>
                   {/* FIX: exerciseConfigs was not defined, imported from types.ts */}
-                  <span className="text-gray-400 ml-2">{exerciseConfigs[exercise].unit}</span>
+                  <span className="text-gray-400 ml-2">{exercise === 'VO2 Max Interval' ? 'sets' : exerciseConfigs[exercise].unit}</span>
                 </div>
               </li>
             ))}
