@@ -96,6 +96,23 @@ const VO2MaxWorkoutView: React.FC<VO2MaxWorkoutViewProps> = ({ addReps }) => {
     setStatus('idle');
     setRound(1);
   };
+
+  const handleTimerClick = () => {
+    switch (status) {
+        case 'idle':
+            handleStart();
+            break;
+        case 'working':
+            handleStartRest();
+            break;
+        case 'recovering':
+            handleStartWork();
+            break;
+        case 'countdown':
+            handleReset();
+            break;
+    }
+  }
   
   const formatTime = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
@@ -103,43 +120,65 @@ const VO2MaxWorkoutView: React.FC<VO2MaxWorkoutViewProps> = ({ addReps }) => {
     return `${minutes}:${seconds}`;
   };
 
+  const getBorderColor = () => {
+    if (status === 'working') return 'border-green-500 shadow-[0_0_30px_rgba(34,197,94,0.4)]';
+    if (status === 'recovering') return 'border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.4)]';
+    if (status === 'countdown') return 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.4)]';
+    return 'border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:border-cyan-400';
+  }
+
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col justify-center items-center">
+    <div className="w-full max-w-2xl mx-auto flex flex-col justify-center items-center py-8">
       {status === 'idle' && round === 1 && (
-          <div className="p-4 sm:p-6 mb-8 bg-amber-900 bg-opacity-50 border border-amber-600 rounded-xl text-center">
-              <p className="text-base sm:text-lg font-semibold text-amber-300">Remember to warm up for 10 minutes before you begin.</p>
+          <div className="w-full max-w-md p-3 mb-8 bg-blue-900/30 border border-blue-700/50 rounded-lg text-center backdrop-blur-sm">
+              <p className="text-sm sm:text-base font-medium text-blue-200">Remember to warm up for 10 minutes before you begin.</p>
           </div>
       )}
-      <div className={`relative w-64 h-64 sm:w-80 sm:h-80 rounded-full flex flex-col justify-center items-center border-8 shadow-2xl transition-all duration-500 ${
-          status === 'working' ? 'border-green-500' 
-          : status === 'recovering' ? 'border-red-500' 
-          : status === 'countdown' ? 'border-amber-500'
-          : 'border-gray-600'
-      }`}>
-          <p className="text-base sm:text-lg text-gray-400 mb-2">Round {round}</p>
-          <p className="text-6xl sm:text-8xl font-mono font-bold text-white">
-            {status === 'countdown' ? timeLeft : formatTime(timeLeft)}
-          </p>
-          <p className="text-lg sm:text-xl font-semibold mt-2 tracking-wider">
-            { status === 'countdown' ? 'Get Ready...'
-            : status === 'working' ? '100% Max Effort' 
-            : status === 'recovering' ? 'Full Recovery' 
-            : 'Ready to Start'
-            }
-          </p>
-      </div>
-      <div className="mt-12 flex flex-col items-center gap-4 w-full">
-        {status === 'idle' && <button onClick={handleStart} className="w-full sm:w-auto px-12 py-4 text-2xl font-bold bg-cyan-500 hover:bg-cyan-400 text-gray-900 rounded-lg transition-all duration-300 transform hover:scale-105">Start Round {round}</button>}
-        {status === 'working' && <button onClick={handleStartRest} className="w-full sm:w-auto px-12 py-4 text-xl font-bold bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-all duration-300 transform hover:scale-105">Start Rest Period</button>}
-        {status === 'recovering' && <button onClick={handleStartWork} className="w-full sm:w-auto px-12 py-4 text-xl font-bold bg-cyan-500 hover:bg-cyan-400 text-gray-900 rounded-lg transition-all duration-300 transform hover:scale-105">Start 100% Max Effort</button>}
-        
-        {(status === 'working' || status === 'recovering' || status === 'countdown') && (
-            <button onClick={handleReset} className="px-6 py-2 text-base font-semibold bg-red-700 hover:bg-red-600 text-gray-200 rounded-lg transition-colors">
-                Stop Workout
+      
+      <button 
+        onClick={handleTimerClick}
+        className={`relative w-72 h-72 sm:w-80 sm:h-80 rounded-full flex flex-col justify-center items-center border-8 transition-all duration-300 transform active:scale-95 focus:outline-none ${getBorderColor()}`}
+      >
+          <div className="flex flex-col items-center justify-center z-10">
+            {status === 'idle' ? (
+                 <>
+                    <p className="text-4xl font-bold text-white mb-2">START</p>
+                    <p className="text-xl text-cyan-300">Round {round}</p>
+                 </>
+            ) : (
+                <>
+                    <p className="text-lg text-gray-400 mb-2 font-medium">Round {round}</p>
+                    <p className="text-7xl sm:text-8xl font-mono font-bold text-white">
+                        {status === 'countdown' ? timeLeft : formatTime(timeLeft)}
+                    </p>
+                    <p className={`text-lg sm:text-xl font-bold mt-2 tracking-wider uppercase ${
+                        status === 'working' ? 'text-green-400' 
+                        : status === 'recovering' ? 'text-red-400' 
+                        : 'text-amber-400'
+                    }`}>
+                        { status === 'countdown' ? 'Get Ready'
+                        : status === 'working' ? 'Max Effort' 
+                        : status === 'recovering' ? 'Recovering' 
+                        : ''
+                        }
+                    </p>
+                    {status === 'working' && <p className="text-xs text-gray-500 mt-4 uppercase tracking-widest">Tap to Rest</p>}
+                    {status === 'recovering' && <p className="text-xs text-gray-500 mt-4 uppercase tracking-widest">Start Next Round</p>}
+                    {status === 'countdown' && <p className="text-xs text-gray-500 mt-4 uppercase tracking-widest">Tap to Cancel</p>}
+                </>
+            )}
+          </div>
+      </button>
+
+      <div className="mt-12 h-16 flex flex-col justify-center">
+        {(status !== 'idle' || round > 1) && (
+            <button 
+                onClick={handleReset} 
+                className="text-gray-500 hover:text-red-400 transition-colors text-sm font-semibold uppercase tracking-widest px-4 py-2 rounded-lg hover:bg-gray-800"
+            >
+                {status === 'idle' ? 'Reset Workout' : 'End Workout'}
             </button>
         )}
-        
-        {status === 'idle' && round > 1 && <button onClick={handleReset} className="text-sm text-gray-500 hover:text-white transition-colors">Reset</button>}
       </div>
     </div>
   );

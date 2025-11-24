@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ALL_EXERCISES, exerciseConfigs } from '../types';
 import type { Exercise, DailyLogEntry, ExerciseLog } from '../types';
@@ -44,10 +45,10 @@ const TodaysHistoryView: React.FC<TodaysHistoryViewProps> = ({ onBack }) => {
         <button 
           onClick={onBack} 
           className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-cyan-500 rounded-lg transition-all duration-300 transform hover:scale-105"
-          aria-label="Go back to workout selection"
+          aria-label="Go back to home"
         >
           <ArrowLeftIcon />
-          <span className="hidden sm:inline">Back</span>
+          <span>Home</span>
         </button>
         <h1 className="text-3xl font-bold text-cyan-400 text-center flex-grow -ml-16 sm:ml-0">
           Today's Summary

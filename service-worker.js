@@ -15,7 +15,8 @@ const URLS_TO_CACHE = [
   '/components/Icons.tsx',
   '/components/GlobalHistoryView.tsx',
   '/components/VO2MaxView.tsx',
-  '/components/VO2MaxWorkoutView.tsx'
+  '/components/VO2MaxWorkoutView.tsx',
+  '/components/StrengthSelectionView.tsx'
 ];
 
 self.addEventListener('install', event => {

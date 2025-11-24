@@ -1,3 +1,4 @@
+
 export type View = 'input' | 'history' | 'test';
 
 export type Exercise =
@@ -49,6 +50,9 @@ export interface ExerciseSet {
   count: number; // Represents reps or seconds
   timestamp: number;
   isTest?: boolean;
+  // Optional fields for Strength Training
+  weight?: number;
+  exerciseName?: string;
 }
 
 export interface DailyLogEntry {
